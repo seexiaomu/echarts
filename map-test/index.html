@@ -40,7 +40,7 @@
         var myChart = echarts.init($('#map').get(0));
         myChart.showLoading();
         $.getJSON(uploadedDataURL, function(geoJson) {
-    echarts.registerMap('jiangxi', geoJson);
+    echarts.registerMap('jiangxi', geoJson);        //将json数据生成地图
     myChart.hideLoading();
     var geoCoordMap = {
         '赣州市':[114.940278,25.85097],
@@ -114,16 +114,16 @@
                 color: '#fff'
             }
         },
-        visualMap: {
+        visualMap: {        // 视觉映射组件，用于进行『视觉编码』，也就是将数据映射到视觉元素（视觉通道）
             show: false,
             min: 0,
             max: 500,
             left: 'left',
             top: 'bottom',
             text: ['高', '低'], // 文本，默认为数值文本
-            calculable: true,
-            seriesIndex: [1],
-            inRange: {
+            calculable: true,       //是否显示拖拽用的手柄
+            seriesIndex: [1],       //鼠标悬浮到 visualMap 组件上时，鼠标位置对应的数值 在 图表中对应的图形元素，会高亮
+            inRange: {      // 在选中范围中 的视觉元素
                 // color: ['#3B5077', '#031525'] // 蓝黑
                 // color: ['#ffc0cb', '#800080'] // 红紫
                 // color: ['#3C3B3F', '#605C3C'] // 黑绿
@@ -149,7 +149,7 @@
         //             saveAsImage: {}
         //             }
         // },
-        geo: {
+        geo: {          //地理坐标系组件
             show: true,
             map: 'jiangxi',
             label: {
@@ -160,10 +160,10 @@
                     show: false,
                 }
             },
-            roam: true,
+            roam: true,     // 是否开启鼠标缩放和平移漫游。默认不开启
             itemStyle: {
                 normal: {
-                    areaColor: '#031525',
+                    areaColor: '#031525',       //地图区域的颜色
                     borderColor: '#3B5077',
                 },
                 emphasis: {
@@ -175,7 +175,7 @@
       {
             name: 'credit_pm2.5',
             type: 'scatter',
-            coordinateSystem: 'geo',
+            coordinateSystem: 'geo',        
             data: convertData(data),
             symbolSize: function (val) {
                 return val[2] / 10;
@@ -200,7 +200,7 @@
             type: 'map',
             map: 'jiangxi',
             geoIndex: 0,
-            aspectScale: 0.75, //长宽比
+            aspectScale: 0.75, //用于 scale 地图的长宽比,default: 0.75
             showLegendSymbol: false, // 存在legend时显示
             label: {
                 normal: {
@@ -228,9 +228,9 @@
         },
         {
             name: '点',
-            type: 'scatter',
-            coordinateSystem: 'geo',
-            symbol: 'pin',
+            type: 'scatter',        //散点（气泡）图
+            coordinateSystem: 'geo',        //系列使用的坐标系
+            symbol: 'pin',      //标记的图形,也可以通过 'image://url' 设置为图片
             symbolSize: function (val) {
                 var a = (maxSize4Pin - minSize4Pin) / (max - min);
                 var b = minSize4Pin - a*min;
@@ -256,7 +256,7 @@
         },
         {
             name: 'Top 5',
-            type: 'effectScatter',
+            type: 'effectScatter',      //带有涟漪特效动画的散点（气泡）图
             coordinateSystem: 'geo',
             data: convertData(data.sort(function (a, b) {
                 return b.value - a.value;
@@ -264,9 +264,9 @@
             symbolSize: function (val) {
                 return val[2] / 10;
             },
-            showEffectOn: 'render',
-            rippleEffect: {
-                brushType: 'stroke'
+            showEffectOn: 'render',     //配置何时显示特效,'render' 绘制完成后显示特效。'emphasis' 高亮（hover）的时候显示特效。
+            rippleEffect: {     //涟漪特效相关配置
+                brushType: 'stroke'     //波纹的绘制方式，可选 'stroke' 和 'fill'。
             },
             hoverAnimation: true,
             label: {
