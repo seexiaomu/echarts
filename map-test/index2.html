@@ -241,13 +241,13 @@ option = {
         //   return data;
         // },
     },
-    visualMap: [{
+    visualMap: [{       //视觉映射组件    symbol: 图元的图形类别
         type: 'continuous',
         seriesIndex: 0,
         text: ['bar3D'],
-        calculable: true,
+        calculable: true,       //是否显示拖拽用的手柄
         max: 300,
-        inRange: {
+        inRange: {      //在选中范围中 的视觉元素
             color: ['#87aa66', '#eba438', '#d94d4c']
         }
     }, {
