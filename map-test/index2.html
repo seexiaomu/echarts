@@ -4,16 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   
+    <link href='https://api.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.css' rel='stylesheet' />
     <title>Document</title>
 </head>
 <body>
-    <h2><a target="_blank" href="http://gallery.echartsjs.com/editor.html?c=xBkVnciA0b">源码地址</a></h2>
-    <div id="map" style="width:600px;height:500px;margin:0 auto;"></div>
+    <h2><a target="_blank" href="http://gallery.echartsjs.com/editor.html?c=xS1a9fLd0W">源码地址</a></h2>
+    <div id="map" style="width:1200px;height:540px;margin:0 auto;"></div>
 
     <script src="jquery.js"></script>
     <!-- <script src="../jquery-3.1.1.min.js"></script> -->
     <script src="../echarts3.js"></script>
+    <script src="../echarts-gl.min.js"></script>
+    <script src="../china.js"></script>
+    <script src='../mapbox-gl.js'></script>
+
+    <!-- <script>
+        mapboxgl.accessToken = 'undefined';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v9'
+        });
+    </script> -->
+
     <script>
+        // mapboxgl.accessToken = mapboxglToken;
+
+
         var map1 = echarts.init(document.getElementById('map'));
       
         let geoCoordMap = {
@@ -242,8 +259,8 @@ option = {
         // },
     },
     visualMap: [{       //视觉映射组件    symbol: 图元的图形类别
-        type: 'continuous',
-        seriesIndex: 0,
+        type: 'continuous',     //连续型
+        seriesIndex: 0,     //指定取哪个系列的数据，即哪个系列的 series.data,默认取所有系列
         text: ['bar3D'],
         calculable: true,       //是否显示拖拽用的手柄
         max: 300,
@@ -262,10 +279,18 @@ option = {
         }
     }],
     geo3D: {
-        map: 'china',
-        roam: true,
+        map: 'china',       //类型
+        boxWidth:160,
+        boxHeight:10,
+        boxDepth:100,
+        regionHeight:5,        //三维地图每个区域的高度
+        environment:'orange',       //环境贴图
+        groundPlane:'lambertMaterial',      //地面可以让整个组件有个“摆放”的地方
+        instancing:true,        //提升绘制效率
+        roam: true,     //是否开启鼠标缩放和平移漫游
+        // left:200,
         itemStyle: {
-            areaColor: '#1d5e98',
+            areaColor: '#1d5e98',       //地图区域颜色
             opacity: 1,
             borderWidth: 0.4,
             borderColor: '#000'
@@ -277,7 +302,7 @@ option = {
                 fontSize: 8,
                 opacity: 1,
                 backgroundColor: 'rgba(0,23,11,0)'
-            },
+            }
         },
         emphasis: { //当鼠标放上去  地区区域是否显示名称
             label: {
@@ -289,22 +314,36 @@ option = {
                 }
             }
         },
-        shading: 'lambert',
+        //shading: 'lambert',     //三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
         light: { //光照阴影
-            main: {
+            main: {     //场景主光源设置
                 color: '#fff', //光照颜色
-                intensity: 2, //光照强度
+                intensity: 1.2, //光照强度
                 shadowQuality: 'high', //阴影亮度
-                shadow: true, //是否显示阴影
+                shadow: false, //是否显示阴影
+                alpha:55,       //主光源绕 x 轴，即上下旋转的角度。配合 beta 控制光源的方向。
+                beta:10         //主光源绕 y 轴，即左右旋转的角度。
 
+            },
+            ambient:{           
+                intensity:0.3
             }
         }
     },
+    //支持在 mapbox 的地图上绘制三维的散点图，飞线图，柱状图和地图。你可以利用 Mapbox 强大的地图服务和 ECharts GL 丰富的可视化和渲染效果实现你想要的可视化作品。
+    // mapbox:{
+
+    // },
+    // grid3D:{
+
+    // },
     series: [{
-        name: 'bar',
-        type: "bar",
-        coordinateSystem: 'geo3D',
-        barSize: 0.5, //柱子粗细
+        name: 'bar3D',
+        type: "bar3D",
+        coordinateSystem: 'geo3D',      //该系列使用的坐标系
+        barSize: 1, //柱子粗细`
+        shading:'lambert',
+        opcity:0.3,
         label: {
             show: false,
             formatter: '{b}'
@@ -742,10 +781,10 @@ option = {
             }
         ]),
     }, {
-        name: 'scatter3D',
+        name: 'scatter3D',      //气泡   
         type: "scatter3D",
         coordinateSystem: 'geo3D',
-        symbol: 'pin',
+        symbol: 'pin',      //标记的图形
         symbolSize: 30,
         opacity: 1,
         label: {
@@ -778,7 +817,7 @@ option = {
     }]
 }
 
-map1.setOption(option);
+ map1.setOption(option);
 
 
     </script>
